@@ -35,7 +35,6 @@ async fn main() -> Result<()> {
     let listener = TcpListener::bind("0.0.0.0:4444").await?;
     axum::serve(listener, router).await?;
 
-    println!("Hello, world!");
     Ok(())
 }
 
