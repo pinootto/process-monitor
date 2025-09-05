@@ -43,11 +43,17 @@ async fn health_check(State(state): State<Arc<AppState>>) -> String {
     let process = state.process.as_str();
     println!("going to check the health of process: {}", process);
 
-    let mut command = shell(format!("ps aux | grep {}", process).as_str());
+    let mut command = shell(
+        format!(
+            "ps aux | grep {} | grep -v grep | grep -v process-monitor",
+            process
+        )
+        .as_str(),
+    );
     command.stdout(Stdio::piped());
     let output = command.execute_output().unwrap();
     let stdout = String::from_utf8(output.stdout).unwrap();
-    println!("stdout:\n{}", stdout);
+    println!("stdout:\n{}", stdout.trim());
 
     health_report
 }
