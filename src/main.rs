@@ -28,6 +28,7 @@ async fn main() -> Result<()> {
         process: process_name,
     });
 
+    //todo add a scheduler to regularly call health_check
     health_check(State(shared_state.clone())).await;
 
     let router = Router::new()
