@@ -41,7 +41,7 @@ async fn main() -> Result<()> {
 }
 
 async fn health_check(State(state): State<Arc<AppState>>) -> String {
-    let health_report = String::from("good");
+    let mut health_report = String::from("healt report: ");
     let process = state.process.as_str();
     println!("going to check the health of process: {}", process);
 
@@ -55,7 +55,14 @@ async fn health_check(State(state): State<Arc<AppState>>) -> String {
     command.stdout(Stdio::piped());
     let output = command.execute_output().unwrap();
     let stdout = String::from_utf8(output.stdout).unwrap();
-    println!("stdout:\n{}", stdout.trim());
+    let stdout = stdout.trim();
+    println!("stdout:\n{}", stdout);
+
+    if !stdout.is_empty() {
+        health_report.push_str("good");
+    } else {
+        health_report.push_str(format!("bad (process {} not found)", process).as_str());
+    }
 
     health_report
 }
