@@ -28,6 +28,8 @@ async fn main() -> Result<()> {
         process: process_name,
     });
 
+    health_check(State(shared_state.clone())).await;
+
     let router = Router::new()
         .route("/health", get(health_check))
         .with_state(shared_state);
